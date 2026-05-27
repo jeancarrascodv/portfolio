@@ -24,12 +24,12 @@ export function HeroScene() {
   useFrame((_, delta) => {
     const { x, y } = pointer.current;
     if (group.current) {
-      group.current.rotation.y += delta * 0.12;
+      group.current.rotation.y += delta * 0.08;
       group.current.rotation.x += (-y * 0.25 - group.current.rotation.x) * 0.05;
       group.current.position.x += (x * 0.5 - group.current.position.x) * 0.05;
     }
     if (blob.current) {
-      blob.current.rotation.z += delta * 0.05;
+      blob.current.rotation.z += delta * 0.04;
     }
   });
 
@@ -41,7 +41,7 @@ export function HeroScene() {
       <pointLight position={[0, 3, -5]} intensity={20} color="#ffffff" />
 
       <group ref={group}>
-        <Float speed={1.4} rotationIntensity={0.6} floatIntensity={0.9}>
+        <Float speed={1.2} rotationIntensity={0.5} floatIntensity={0.85}>
           {/* Organic distorted core */}
           <mesh ref={blob} scale={1.7}>
             <icosahedronGeometry args={[1, 12]} />
@@ -63,16 +63,17 @@ export function HeroScene() {
           </mesh>
         </Float>
 
-        {/* Floating particles */}
-        <Sparkles
-          count={60}
-          scale={[9, 6, 5]}
-          size={2.2}
-          speed={0.35}
-          opacity={0.6}
-          color="#7dd3fc"
-        />
       </group>
+
+      {/* Floating particles (outside the rotating group so they drift gently) */}
+      <Sparkles
+        count={60}
+        scale={[9, 6, 5]}
+        size={2.2}
+        speed={0.5}
+        opacity={0.6}
+        color="#7dd3fc"
+      />
     </>
   );
 }
