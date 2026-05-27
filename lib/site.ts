@@ -50,7 +50,7 @@ export const siteConfig = {
 /* --------------------------------------------------------------------------- */
 export const socials = {
   github: "https://github.com/jeancarrascodv",
-  linkedin: "https://www.linkedin.com/in/jeancarrasco",
+  linkedin: "https://www.linkedin.com/in/jean-carrasco/",
   x: "", // opcional (Twitter/X)
   email: `mailto:${siteConfig.email}`,
 };
