@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "about": "About",
+    "skills": "Skills",
+    "work": "Work",
+    "experience": "Experience",
+    "contact": "Contact",
+    "resume": "Résumé"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "headline": "I build AI-driven products & automation.",
+    "tagline": "Full-stack engineer turning language models, APIs and infrastructure into products people actually use.",
+    "ctaPrimary": "View my work",
+    "ctaSecondary": "Get in touch",
+    "availability": "Available for new opportunities",
+    "scroll": "Scroll to explore"
+  },
+  "about": {
+    "label": "About",
+    "title": "Engineering products end to end",
+    "paragraphs": [
+      "I'm a full-stack engineer focused on AI and automation. I enjoy taking an idea all the way from infrastructure to interface — designing APIs, wiring up language models, and shipping interfaces that feel fast and intentional.",
+      "Over the last few years I've built and operated production systems that combine LLMs, messaging platforms and self-hosted infrastructure: WhatsApp automation, customer-response bots, and the DevOps glue that keeps them running reliably.",
+      "I care about clean architecture, pragmatic trade-offs and writing code that other people can read. I'm currently open to roles where I can own meaningful problems end to end."
+    ],
+    "stats": {
+      "experience": "Years building",
+      "projects": "Projects shipped",
+      "stack": "Core stack"
+    }
+  },
+  "skills": {
+    "label": "Skills",
+    "title": "Tools I work with",
+    "subtitle": "A pragmatic, product-oriented stack — from the database to the pixels."
+  },
+  "projects": {
+    "label": "Selected work",
+    "title": "Things I've built",
+    "subtitle": "A few projects that show how I think and what I can ship.",
+    "viewProject": "Live",
+    "viewCode": "Code",
+    "featured": "Featured"
+  },
+  "experience": {
+    "label": "Experience",
+    "title": "Where I've worked",
+    "present": "Present"
+  },
+  "contact": {
+    "label": "Contact",
+    "title": "Let's build something together",
+    "subtitle": "I'm open to full-time roles, freelance work and interesting collaborations. The fastest way to reach me is email.",
+    "emailCta": "Send me an email",
+    "or": "or find me on",
+    "copy": "Copy email",
+    "copied": "Copied!"
+  },
+  "footer": {
+    "builtWith": "Built with Next.js, React Three Fiber & Tailwind CSS",
+    "rights": "All rights reserved.",
+    "backToTop": "Back to top"
+  },
+  "meta": {
+    "title": "Jean Carrasco — Full-Stack Engineer · AI & Automation",
+    "description": "Portfolio of Jean Carrasco, a full-stack engineer specializing in AI, automation and self-hosted infrastructure. Available for new opportunities."
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "about": "Sobre mí",
+    "skills": "Skills",
+    "work": "Proyectos",
+    "experience": "Experiencia",
+    "contact": "Contacto",
+    "resume": "CV"
+  },
+  "hero": {
+    "greeting": "Hola, soy",
+    "headline": "Construyo productos y automatización con IA.",
+    "tagline": "Ingeniero full-stack que convierte modelos de lenguaje, APIs e infraestructura en productos que la gente realmente usa.",
+    "ctaPrimary": "Ver mi trabajo",
+    "ctaSecondary": "Hablemos",
+    "availability": "Disponible para nuevas oportunidades",
+    "scroll": "Desplázate para explorar"
+  },
+  "about": {
+    "label": "Sobre mí",
+    "title": "Ingeniería de productos de principio a fin",
+    "paragraphs": [
+      "Soy ingeniero full-stack enfocado en IA y automatización. Disfruto llevar una idea desde la infraestructura hasta la interfaz: diseñar APIs, integrar modelos de lenguaje y crear interfaces que se sienten rápidas e intencionales.",
+      "En los últimos años he construido y operado sistemas en producción que combinan LLMs, plataformas de mensajería e infraestructura autoalojada: automatización de WhatsApp, bots de atención al cliente y todo el DevOps que los mantiene funcionando de forma fiable.",
+      "Me importan la arquitectura limpia, las decisiones pragmáticas y escribir código que otras personas puedan leer. Actualmente estoy abierto a roles donde pueda hacerme cargo de problemas relevantes de extremo a extremo."
+    ],
+    "stats": {
+      "experience": "Años construyendo",
+      "projects": "Proyectos lanzados",
+      "stack": "Stack principal"
+    }
+  },
+  "skills": {
+    "label": "Skills",
+    "title": "Herramientas con las que trabajo",
+    "subtitle": "Un stack pragmático y orientado a producto — desde la base de datos hasta los píxeles."
+  },
+  "projects": {
+    "label": "Trabajo seleccionado",
+    "title": "Cosas que he construido",
+    "subtitle": "Algunos proyectos que muestran cómo pienso y qué puedo entregar.",
+    "viewProject": "Demo",
+    "viewCode": "Código",
+    "featured": "Destacado"
+  },
+  "experience": {
+    "label": "Experiencia",
+    "title": "Dónde he trabajado",
+    "present": "Actualidad"
+  },
+  "contact": {
+    "label": "Contacto",
+    "title": "Construyamos algo juntos",
+    "subtitle": "Estoy abierto a roles a tiempo completo, trabajo freelance y colaboraciones interesantes. La forma más rápida de contactarme es por correo.",
+    "emailCta": "Envíame un correo",
+    "or": "o encuéntrame en",
+    "copy": "Copiar correo",
+    "copied": "¡Copiado!"
+  },
+  "footer": {
+    "builtWith": "Hecho con Next.js, React Three Fiber y Tailwind CSS",
+    "rights": "Todos los derechos reservados.",
+    "backToTop": "Volver arriba"
+  },
+  "meta": {
+    "title": "Jean Carrasco — Ingeniero Full-Stack · IA y Automatización",
+    "description": "Portafolio de Jean Carrasco, ingeniero full-stack especializado en IA, automatización e infraestructura autoalojada. Disponible para nuevas oportunidades."
+  }
+}
