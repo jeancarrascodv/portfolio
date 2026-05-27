@@ -9,8 +9,8 @@
   },
   "hero": {
     "greeting": "Hola, soy",
-    "headline": "Construyo productos y automatización con IA.",
-    "tagline": "Ingeniero full-stack que convierte modelos de lenguaje, APIs e infraestructura en productos que la gente realmente usa.",
+    "headline": "Construyo automatización con IA que escala operaciones y prospección.",
+    "tagline": "Ingeniero industrial convertido en ingeniero de software. Diseño agentes de IA, pipelines de generación de leads y sistemas escalables que ayudan a las empresas a crecer sin aumentar la plantilla.",
     "ctaPrimary": "Ver mi trabajo",
     "ctaSecondary": "Hablemos",
     "availability": "Disponible para nuevas oportunidades",
@@ -18,22 +18,17 @@
   },
   "about": {
     "label": "Sobre mí",
-    "title": "Ingeniería de productos de principio a fin",
+    "title": "Donde la industria se encuentra con el software",
     "paragraphs": [
-      "Soy ingeniero full-stack enfocado en IA y automatización. Disfruto llevar una idea desde la infraestructura hasta la interfaz: diseñar APIs, integrar modelos de lenguaje y crear interfaces que se sienten rápidas e intencionales.",
-      "En los últimos años he construido y operado sistemas en producción que combinan LLMs, plataformas de mensajería e infraestructura autoalojada: automatización de WhatsApp, bots de atención al cliente y todo el DevOps que los mantiene funcionando de forma fiable.",
-      "Me importan la arquitectura limpia, las decisiones pragmáticas y escribir código que otras personas puedan leer. Actualmente estoy abierto a roles donde pueda hacerme cargo de problemas relevantes de extremo a extremo."
-    ],
-    "stats": {
-      "experience": "Años construyendo",
-      "projects": "Proyectos lanzados",
-      "stack": "Stack principal"
-    }
+      "Soy ingeniero de software con una base en ingeniería industrial y liderazgo de operaciones. Durante años dirigí almacenes, cadenas de suministro y equipos de hasta 60 personas, y luego pasé al software para automatizar el trabajo que antes gestionaba a mano.",
+      "Hoy construyo sistemas de automatización con IA y prospección: agentes de IA y AI clones, pipelines de generación de leads y herramientas que convierten operaciones manuales en procesos escalables y repetibles. Fundé QueryBay para empaquetar todo eso en productos que otras empresas pueden usar.",
+      "Mi diferencial es la combinación. Entiendo la operación desde el piso y puedo construir el software que la escala. Tengo títulos en ingeniería de manufactura e ingeniería de software, además de un MBA, y siempre estoy buscando el próximo proceso que valga la pena automatizar."
+    ]
   },
   "skills": {
     "label": "Skills",
     "title": "Herramientas con las que trabajo",
-    "subtitle": "Un stack pragmático y orientado a producto — desde la base de datos hasta los píxeles."
+    "subtitle": "Desde el piso del almacén hasta el pipeline de despliegue. Un stack pensado para entregar y para escalar."
   },
   "projects": {
     "label": "Trabajo seleccionado",
@@ -47,6 +42,10 @@
     "label": "Experiencia",
     "title": "Dónde he trabajado",
     "present": "Actualidad"
+  },
+  "education": {
+    "title": "Educación",
+    "languages": "Idiomas"
   },
   "contact": {
     "label": "Contacto",
@@ -63,7 +62,7 @@
     "backToTop": "Volver arriba"
   },
   "meta": {
-    "title": "Jean Carrasco — Ingeniero Full-Stack · IA y Automatización",
-    "description": "Portafolio de Jean Carrasco, ingeniero full-stack especializado en IA, automatización e infraestructura autoalojada. Disponible para nuevas oportunidades."
+    "title": "Jean Carrasco · Ingeniero de Automatización con IA",
+    "description": "Jean Carrasco es ingeniero de software e ingeniero industrial que construye automatización con IA, sistemas de generación de leads y agentes de IA que escalan operaciones. Fundador de QueryBay. Disponible para nuevas oportunidades."
   }
 }

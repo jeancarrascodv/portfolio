@@ -20,10 +20,10 @@ export default async function HomePage({
   return (
     <>
       <Hero hero={dict.hero} locale={locale} />
-      <About about={dict.about} />
+      <About about={dict.about} locale={locale} />
       <Skills skills={dict.skills} locale={locale} />
       <Projects projects={dict.projects} locale={locale} />
-      <Experience experience={dict.experience} locale={locale} />
+      <Experience experience={dict.experience} education={dict.education} locale={locale} />
       <Contact contact={dict.contact} />
     </>
   );

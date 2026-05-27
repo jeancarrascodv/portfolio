@@ -3,6 +3,7 @@
  * =============================================================================
  *  Los textos que dependen del idioma usan el formato { en: "...", es: "..." }.
  *  Reemplaza los valores marcados con  // TODO  por tus datos reales.
+ *  Nota de estilo: evita los guiones largos ("—") en los textos.
  * ========================================================================== */
 
 import type { Locale } from "@/i18n/config";
@@ -17,27 +18,28 @@ export const t = (value: Localized, locale: Locale): string => value[locale];
 /*  Datos principales                                                          */
 /* --------------------------------------------------------------------------- */
 export const siteConfig = {
-  // Dominio final (úsalo en metadata / Open Graph). // TODO: pon tu dominio.
-  url: "https://jeancarrasco.dev",
+  // Dominio final (se usa en metadata / Open Graph / sitemap).
+  url: "https://jeancarrasco.com",
 
   name: "Jean Carrasco",
   initials: "JC",
 
   role: {
-    en: "Full-Stack Engineer · AI & Automation",
-    es: "Ingeniero Full-Stack · IA y Automatización",
+    en: "AI Automation Engineer · Industrial Engineer",
+    es: "Ingeniero de Automatización con IA · Ingeniero Industrial",
   } as Localized,
 
   location: {
-    en: "Lima, Peru · Remote worldwide",
-    es: "Lima, Perú · Remoto en cualquier parte",
+    en: "Salt Lake City, Utah · Open to remote",
+    es: "Salt Lake City, Utah · Abierto a remoto",
   } as Localized,
 
   // Correo público que se muestra en la sección de contacto.
-  email: "ja.gpt.service@gmail.com", // TODO: confirma el correo que quieras mostrar.
+  email: "jean@querybay.com",
 
-  // CV en PDF. Coloca el archivo en /public/ y deja el nombre aquí (o null para ocultar).
-  resume: "/jean-carrasco-cv.pdf", // TODO: añade tu CV en public/ o pon null.
+  // CV en PDF. Coloca el archivo en /public/ y pon aquí el nombre (ej:
+  // "/jean-carrasco-cv.pdf"). Mientras no exista, déjalo en null.
+  resume: null as string | null, // TODO: añade tu CV en public/ y pon la ruta.
 
   // true = muestra el badge "disponible para nuevas oportunidades".
   available: true,
@@ -47,20 +49,38 @@ export const siteConfig = {
 /*  Redes sociales (deja la url vacía "" para ocultar el ícono)                */
 /* --------------------------------------------------------------------------- */
 export const socials = {
-  github: "https://github.com/jeancarrasco", // TODO
-  linkedin: "https://www.linkedin.com/in/jeancarrasco", // TODO
-  x: "", // TODO opcional (Twitter/X)
+  github: "https://github.com/jeancarrascodv",
+  linkedin: "https://www.linkedin.com/in/jeancarrasco",
+  x: "", // opcional (Twitter/X)
   email: `mailto:${siteConfig.email}`,
 };
 
 /* --------------------------------------------------------------------------- */
-/*  Métricas del hero / about (ajusta a tu realidad)                           */
+/*  Métricas del bloque "Sobre mí"                                             */
 /* --------------------------------------------------------------------------- */
-export const stats = {
-  yearsExperience: "4+", // TODO
-  projectsShipped: "15+", // TODO
-  coreStack: "TypeScript",
-};
+export const stats: { value: string; label: Localized }[] = [
+  {
+    value: "7+",
+    label: {
+      en: "Years across engineering and operations",
+      es: "Años entre ingeniería y operaciones",
+    },
+  },
+  {
+    value: "20+",
+    label: {
+      en: "AI automations and systems shipped",
+      es: "Automatizaciones y sistemas con IA entregados",
+    },
+  },
+  {
+    value: "60+",
+    label: {
+      en: "People led across teams",
+      es: "Personas lideradas en equipos",
+    },
+  },
+];
 
 /* --------------------------------------------------------------------------- */
 /*  Skills — agrupadas por categoría                                           */
@@ -72,28 +92,50 @@ export type SkillGroup = {
 
 export const skills: SkillGroup[] = [
   {
-    category: { en: "Languages", es: "Lenguajes" },
-    items: ["TypeScript", "JavaScript", "Python", "SQL", "Bash"],
+    category: { en: "AI & Automation", es: "IA y Automatización" },
+    items: [
+      "AI Agents",
+      "AI Clones",
+      "LLMs (OpenAI, Anthropic, Ollama)",
+      "RAG",
+      "Prompt Engineering",
+      "Workflow Automation",
+      "n8n / Make",
+    ],
   },
   {
-    category: { en: "Frontend", es: "Frontend" },
-    items: ["React", "Next.js", "Tailwind CSS", "Framer Motion", "React Three Fiber"],
+    category: { en: "Outreach & Growth", es: "Prospección y Crecimiento" },
+    items: [
+      "Lead Generation",
+      "Pipeline Optimization",
+      "Cold Email Infrastructure",
+      "Data Enrichment",
+      "Clay",
+      "Instantly",
+      "CRM Automation",
+    ],
   },
   {
-    category: { en: "Backend", es: "Backend" },
-    items: ["Node.js", "Express", "REST APIs", "WebSockets", "PostgreSQL", "Redis"],
+    category: { en: "Software", es: "Software" },
+    items: ["TypeScript", "JavaScript", "Python", "Java", "React", "Next.js", "Node.js", "SQL"],
   },
   {
-    category: { en: "AI / LLMs", es: "IA / LLMs" },
-    items: ["Ollama", "OpenAI API", "Anthropic API", "RAG", "Prompt engineering"],
+    category: { en: "Operations & Engineering", es: "Operaciones e Ingeniería" },
+    items: [
+      "Lean Manufacturing",
+      "Process Optimization",
+      "Supply Chain",
+      "Inventory Management",
+      "Project Engineering",
+    ],
   },
   {
-    category: { en: "Infra / DevOps", es: "Infra / DevOps" },
+    category: { en: "Infra & DevOps", es: "Infra y DevOps" },
     items: ["Docker", "Linux / VPS", "Nginx", "pm2", "Tailscale", "Vercel"],
   },
   {
-    category: { en: "Tools", es: "Herramientas" },
-    items: ["Git", "GitHub Actions", "Postman", "Figma"],
+    category: { en: "Leadership & Business", es: "Liderazgo y Negocio" },
+    items: ["General Management", "International Business", "Consulting", "Team Leadership", "MBA"],
   },
 ];
 
@@ -101,21 +143,13 @@ export const skills: SkillGroup[] = [
 /*  Proyectos                                                                  */
 /* --------------------------------------------------------------------------- */
 export type Project = {
-  /** Identificador único (para keys). */
   slug: string;
-  /** Nombre del producto (igual en ambos idiomas). */
   title: string;
-  /** Frase corta bajo el título. */
   summary: Localized;
-  /** Descripción más larga. */
   description: Localized;
-  /** Stack/etiquetas. */
   tags: string[];
-  /** Año o rango. */
   year: string;
-  /** Enlaces (deja "" para ocultar el botón). */
   links: { live: string; code: string };
-  /** true = proyecto destacado (ocupa más ancho). */
   featured: boolean;
 };
 
@@ -124,77 +158,76 @@ export const projects: Project[] = [
     slug: "querybay",
     title: "QueryBay",
     summary: {
-      en: "AI customer-response platform for WhatsApp",
-      es: "Plataforma de respuestas con IA para WhatsApp",
+      en: "AI automation platform for outreach and customer support",
+      es: "Plataforma de automatización con IA para prospección y soporte",
     },
     description: {
-      en: "A SaaS platform that automates customer conversations on WhatsApp using LLMs. I built the messaging bridge, the LLM orchestration layer and the dashboard, and operate the self-hosted infrastructure behind it.",
-      es: "Plataforma SaaS que automatiza conversaciones de atención al cliente en WhatsApp usando LLMs. Construí el puente de mensajería, la capa de orquestación de LLMs y el panel de control, y opero la infraestructura autoalojada detrás.",
+      en: "QueryBay is the company I founded to turn AI agents into a product. It connects messaging channels like WhatsApp to language models, automates customer conversations, qualifies leads and books meetings, all running on infrastructure I designed and operate.",
+      es: "QueryBay es la empresa que fundé para convertir a los agentes de IA en un producto. Conecta canales de mensajería como WhatsApp con modelos de lenguaje, automatiza conversaciones, califica leads y agenda reuniones, todo sobre infraestructura que diseñé y opero.",
     },
     tags: ["Next.js", "Node.js", "LLMs", "WhatsApp API", "Docker"],
-    year: "2024 — " + "Present",
-    links: { live: "", code: "" }, // TODO
-    featured: true,
-  },
-  {
-    slug: "queryrespond",
-    title: "QueryRespond",
-    summary: {
-      en: "Self-hosted WhatsApp AI assistant bridge",
-      es: "Puente autoalojado de asistente IA para WhatsApp",
-    },
-    description: {
-      en: "A bridge that connects WhatsApp to local language models (Ollama) running on private infrastructure, with a tunnel for secure access. Designed for privacy-first, low-cost automation.",
-      es: "Un puente que conecta WhatsApp con modelos de lenguaje locales (Ollama) corriendo en infraestructura privada, con un túnel para acceso seguro. Diseñado para automatización privada y de bajo costo.",
-    },
-    tags: ["Node.js", "Ollama", "OpenWA", "Tailscale", "pm2"],
-    year: "2024",
-    links: { live: "", code: "" }, // TODO
-    featured: true,
-  },
-  {
-    slug: "workforce",
-    title: "Workforce",
-    summary: {
-      en: "Recruitment & job-application automation",
-      es: "Automatización de reclutamiento y postulaciones",
-    },
-    description: {
-      en: "Automation tooling that streamlines sourcing and applications across job boards, routing browser traffic through residential proxies for reliability at scale.",
-      es: "Herramientas de automatización que agilizan la búsqueda y las postulaciones en portales de empleo, enrutando el tráfico del navegador a través de proxies residenciales para fiabilidad a escala.",
-    },
-    tags: ["TypeScript", "Playwright", "Docker", "Proxies"],
     year: "2025",
-    links: { live: "", code: "" }, // TODO
+    links: { live: "https://querybay.com", code: "" },
+    featured: true,
+  },
+  {
+    slug: "outreach-engine",
+    title: "Outreach Automation Engine",
+    summary: {
+      en: "Lead generation and pipeline automation at scale",
+      es: "Generación de leads y automatización de pipeline a escala",
+    },
+    description: {
+      en: "The system behind high volume outreach: data enrichment, cold email infrastructure, lead scoring and pipeline automation that consistently fills the sales calendar without adding headcount.",
+      es: "El sistema detrás de la prospección a gran volumen: enriquecimiento de datos, infraestructura de cold email, scoring de leads y automatización de pipeline que llena el calendario comercial de forma constante sin aumentar la plantilla.",
+    },
+    tags: ["Python", "Clay", "Instantly", "Data Enrichment", "APIs"],
+    year: "2023",
+    links: { live: "", code: "" },
+    featured: true,
+  },
+  {
+    slug: "ai-clones",
+    title: "AI Clones",
+    summary: {
+      en: "Personalized AI agents that talk like you",
+      es: "Agentes de IA personalizados que hablan como tú",
+    },
+    description: {
+      en: "A framework for AI clones: agents trained on a person's voice, writing and knowledge so they can hold conversations, answer questions and qualify prospects exactly as the founder would, around the clock.",
+      es: "Un framework de AI clones: agentes entrenados con la voz, la escritura y el conocimiento de una persona para sostener conversaciones, responder preguntas y calificar prospectos tal como lo haría el fundador, las 24 horas.",
+    },
+    tags: ["LLMs", "RAG", "Prompt Engineering", "Voice", "TypeScript"],
+    year: "2025",
+    links: { live: "", code: "" },
     featured: false,
   },
   {
-    slug: "homelab",
-    title: "Self-hosted AI Infrastructure",
+    slug: "industrial-ops",
+    title: "Industrial Ops Automation",
     summary: {
-      en: "Private LLM homelab with Docker & Tailscale",
-      es: "Homelab de LLMs privado con Docker y Tailscale",
+      en: "Automating warehouses, inventory and maintenance",
+      es: "Automatización de almacenes, inventario y mantenimiento",
     },
     description: {
-      en: "A private, always-on environment running local LLMs and supporting services in Docker, networked securely with Tailscale and exposed through hardened tunnels.",
-      es: "Un entorno privado y siempre activo que corre LLMs locales y servicios de apoyo en Docker, conectado de forma segura con Tailscale y expuesto a través de túneles endurecidos.",
+      en: "Built on years running melamine and construction material operations, this suite ties inventory, sales and machinery maintenance into one live dashboard, replacing manual counts and spreadsheets with real time data and alerts across five warehouses.",
+      es: "Apoyada en años dirigiendo operaciones de melamina y materiales de construcción, esta suite integra inventario, ventas y mantenimiento de maquinaria en un panel en vivo, reemplazando conteos manuales y hojas de cálculo por datos y alertas en tiempo real en cinco almacenes.",
     },
-    tags: ["Docker", "Ollama", "Tailscale", "Nginx", "Linux"],
-    year: "2024 — " + "Present",
-    links: { live: "", code: "" }, // TODO
+    tags: ["Python", "SQL", "Dashboards", "Process Optimization"],
+    year: "2023",
+    links: { live: "", code: "" },
     featured: false,
   },
 ];
 
 /* --------------------------------------------------------------------------- */
 /*  Experiencia laboral                                                        */
-/*  // TODO: reemplaza con tu historial real. No inventes datos para empleo.   */
 /* --------------------------------------------------------------------------- */
 export type Job = {
   company: string;
   role: Localized;
-  /** Texto del periodo, ej: "2024 — Present" / "2024 — Actualidad". */
   period: Localized;
+  location: string;
   description: Localized;
   tags: string[];
 };
@@ -202,28 +235,113 @@ export type Job = {
 export const experience: Job[] = [
   {
     company: "QueryBay",
-    role: {
-      en: "Founder & Full-Stack Engineer",
-      es: "Fundador e Ingeniero Full-Stack",
-    },
-    period: { en: "2024 — Present", es: "2024 — Actualidad" },
+    role: { en: "Founder & CEO", es: "Fundador y CEO" },
+    period: { en: "Sep 2025 to Present", es: "Sep 2025 a la actualidad" },
+    location: "Salt Lake City, Utah",
     description: {
-      en: "Designed, built and operate an AI-powered WhatsApp automation platform end to end: product, backend, frontend and infrastructure.",
-      es: "Diseñé, construí y opero una plataforma de automatización de WhatsApp con IA de extremo a extremo: producto, backend, frontend e infraestructura.",
+      en: "Founded an AI automation company. I lead product, engineering and go to market, building AI agents that automate outreach and customer support for other businesses.",
+      es: "Fundé una empresa de automatización con IA. Lidero producto, ingeniería y go to market, construyendo agentes de IA que automatizan la prospección y el soporte de otras empresas.",
     },
-    tags: ["Next.js", "Node.js", "LLMs", "DevOps"],
+    tags: ["AI Agents", "Next.js", "Node.js", "DevOps"],
   },
   {
-    company: "Freelance",
-    role: {
-      en: "Full-Stack Developer",
-      es: "Desarrollador Full-Stack",
-    },
-    period: { en: "2021 — 2024", es: "2021 — 2024" },
+    company: "Janium",
+    role: { en: "VP, Data Operations", es: "VP de Operaciones de Datos" },
+    period: { en: "Dec 2023 to Present", es: "Dic 2023 a la actualidad" },
+    location: "Denver, Colorado",
     description: {
-      en: "Built web applications, automations and integrations for clients, from APIs and dashboards to deployment and maintenance.",
-      es: "Construí aplicaciones web, automatizaciones e integraciones para clientes, desde APIs y paneles hasta despliegue y mantenimiento.",
+      en: "Lead the data and automation function behind outreach at scale: lead generation, data enrichment, cold email infrastructure and pipeline optimization.",
+      es: "Lidero el área de datos y automatización detrás de la prospección a escala: generación de leads, enriquecimiento de datos, infraestructura de cold email y optimización de pipeline.",
     },
-    tags: ["React", "Node.js", "PostgreSQL", "Docker"],
+    tags: ["Lead Generation", "Python", "Automation", "Data"],
+  },
+  {
+    company: "Maderas América",
+    role: { en: "Chief Operations Officer", es: "Director de Operaciones (COO)" },
+    period: { en: "2023", es: "2023" },
+    location: "Lima, Peru",
+    description: {
+      en: "Ran daily operations for a melamine and construction materials company: five warehouses, inventory aligned with sales, machinery maintenance and international imports.",
+      es: "Dirigí las operaciones diarias de una empresa de melamina y materiales de construcción: cinco almacenes, inventario alineado con ventas, mantenimiento de maquinaria e importaciones internacionales.",
+    },
+    tags: ["Operations", "Supply Chain", "Inventory", "Imports"],
+  },
+  {
+    company: "Hidroalemana S.A.C.",
+    role: { en: "General Manager", es: "Gerente General" },
+    period: { en: "2021 to 2023", es: "2021 a 2023" },
+    location: "Lima, Peru",
+    description: {
+      en: "Led a hydraulic well and submersible pump company serving clients such as Alicorp and Nestlé, owning logistics, contracts, client relationships and financial oversight.",
+      es: "Dirigí una empresa de pozos hidráulicos y bombas sumergibles con clientes como Alicorp y Nestlé, a cargo de logística, contratos, relaciones con clientes y supervisión financiera.",
+    },
+    tags: ["General Management", "Logistics", "B2B", "Finance"],
+  },
+  {
+    company: "Representaciones Peruanas del Sur",
+    role: { en: "Operations Coordinator", es: "Coordinador de Operaciones" },
+    period: { en: "2018 to 2022", es: "2018 a 2022" },
+    location: "Lima, Peru",
+    description: {
+      en: "Coordinated environmental public services for two municipal districts in Lima, leading a team of 60 and optimizing waste management and scheduling.",
+      es: "Coordiné servicios públicos ambientales para dos distritos de Lima, liderando un equipo de 60 personas y optimizando la gestión de residuos y la programación.",
+    },
+    tags: ["Team Leadership", "Operations", "Scheduling"],
+  },
+];
+
+/* --------------------------------------------------------------------------- */
+/*  Educación                                                                  */
+/* --------------------------------------------------------------------------- */
+export type Education = {
+  school: string;
+  degree: Localized;
+  period: Localized;
+  location: string;
+};
+
+export const education: Education[] = [
+  {
+    school: "Ensign College",
+    degree: {
+      en: "B.S. in Software Engineering",
+      es: "Lic. en Ingeniería de Software",
+    },
+    period: { en: "2024 to 2025", es: "2024 a 2025" },
+    location: "Salt Lake City, Utah",
+  },
+  {
+    school: "Universidad San Ignacio de Loyola",
+    degree: {
+      en: "B.Eng. in Manufacturing Engineering",
+      es: "Ing. en Ingeniería de Manufactura",
+    },
+    period: { en: "2013 to 2018", es: "2013 a 2018" },
+    location: "Lima, Peru",
+  },
+  // TODO: si quieres mostrar el MBA, completa la institución y descomenta:
+  // {
+  //   school: "Tu institución del MBA",
+  //   degree: { en: "MBA, Business Administration", es: "MBA, Administración de Empresas" },
+  //   period: { en: "", es: "" },
+  //   location: "",
+  // },
+];
+
+/* --------------------------------------------------------------------------- */
+/*  Idiomas                                                                    */
+/* --------------------------------------------------------------------------- */
+export const languages: { name: Localized; level: Localized }[] = [
+  {
+    name: { en: "Spanish", es: "Español" },
+    level: { en: "Native", es: "Nativo" },
+  },
+  {
+    name: { en: "English", es: "Inglés" },
+    level: { en: "Bilingual", es: "Bilingüe" },
+  },
+  {
+    name: { en: "Portuguese", es: "Portugués" },
+    level: { en: "Bilingual", es: "Bilingüe" },
   },
 ];

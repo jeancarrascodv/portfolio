@@ -9,8 +9,8 @@
   },
   "hero": {
     "greeting": "Hi, I'm",
-    "headline": "I build AI-driven products & automation.",
-    "tagline": "Full-stack engineer turning language models, APIs and infrastructure into products people actually use.",
+    "headline": "I build AI automation that scales operations and outreach.",
+    "tagline": "Industrial engineer turned software engineer. I design AI agents, lead generation pipelines and scalable systems that help companies grow without adding headcount.",
     "ctaPrimary": "View my work",
     "ctaSecondary": "Get in touch",
     "availability": "Available for new opportunities",
@@ -18,22 +18,17 @@
   },
   "about": {
     "label": "About",
-    "title": "Engineering products end to end",
+    "title": "Where industry meets software",
     "paragraphs": [
-      "I'm a full-stack engineer focused on AI and automation. I enjoy taking an idea all the way from infrastructure to interface — designing APIs, wiring up language models, and shipping interfaces that feel fast and intentional.",
-      "Over the last few years I've built and operated production systems that combine LLMs, messaging platforms and self-hosted infrastructure: WhatsApp automation, customer-response bots, and the DevOps glue that keeps them running reliably.",
-      "I care about clean architecture, pragmatic trade-offs and writing code that other people can read. I'm currently open to roles where I can own meaningful problems end to end."
-    ],
-    "stats": {
-      "experience": "Years building",
-      "projects": "Projects shipped",
-      "stack": "Core stack"
-    }
+      "I am a software engineer with a background in industrial engineering and operations leadership. For years I ran warehouses, supply chains and teams of up to 60 people, then moved into software to automate the work I used to manage by hand.",
+      "Today I build AI automation and outreach systems: AI agents and AI clones, lead generation pipelines and tools that turn manual operations into scalable, repeatable processes. I founded QueryBay to package that into products other companies can use.",
+      "My edge is the combination. I understand the operation from the floor up and I can build the software that scales it. I hold degrees in manufacturing engineering and software engineering plus an MBA, and I am always looking for the next process worth automating."
+    ]
   },
   "skills": {
     "label": "Skills",
     "title": "Tools I work with",
-    "subtitle": "A pragmatic, product-oriented stack — from the database to the pixels."
+    "subtitle": "From the warehouse floor to the deploy pipeline. A stack built to ship and to scale."
   },
   "projects": {
     "label": "Selected work",
@@ -48,10 +43,14 @@
     "title": "Where I've worked",
     "present": "Present"
   },
+  "education": {
+    "title": "Education",
+    "languages": "Languages"
+  },
   "contact": {
     "label": "Contact",
     "title": "Let's build something together",
-    "subtitle": "I'm open to full-time roles, freelance work and interesting collaborations. The fastest way to reach me is email.",
+    "subtitle": "I'm open to full time roles, freelance work and interesting collaborations. The fastest way to reach me is email.",
     "emailCta": "Send me an email",
     "or": "or find me on",
     "copy": "Copy email",
@@ -63,7 +62,7 @@
     "backToTop": "Back to top"
   },
   "meta": {
-    "title": "Jean Carrasco — Full-Stack Engineer · AI & Automation",
-    "description": "Portfolio of Jean Carrasco, a full-stack engineer specializing in AI, automation and self-hosted infrastructure. Available for new opportunities."
+    "title": "Jean Carrasco · AI Automation Engineer",
+    "description": "Jean Carrasco is a software engineer and industrial engineer who builds AI automation, lead generation systems and AI agents that scale operations. Founder of QueryBay. Open to new opportunities."
   }
 }
