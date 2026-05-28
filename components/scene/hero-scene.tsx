@@ -1,24 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { Environment, Float, Lightformer } from "@react-three/drei";
 import * as THREE from "three/webgpu";
-import {
-  bloom as bloomNode,
-} from "three/addons/tsl/display/BloomNode.js";
-import { chromaticAberration } from "three/addons/tsl/display/ChromaticAberrationNode.js";
-import { film as filmNode } from "three/addons/tsl/display/FilmNode.js";
 import {
   color,
   mix,
   mx_fractal_noise_vec3,
   mx_noise_float,
   normalLocal,
-  pass,
   positionLocal,
   time,
-  uniform,
   vec3,
 } from "three/tsl";
 
@@ -104,31 +97,8 @@ export function HeroScene() {
   // stay pointer-events:none and never block the hero text/buttons.
   const pointer = useRef({ x: 0, y: 0 });
 
-  const { gl, scene, camera } = useThree();
-
   const blobMaterial = useMemo(() => makeBlobMaterial(), []);
   const particles = useMemo(() => makeParticles(), []);
-
-  // Build the WebGPU post-processing graph once: scene pass + bloom (+ subtle
-  // chromatic aberration + film grain) as the output node. RenderPipeline is
-  // the r183+ replacement for the deprecated PostProcessing class.
-  const pipeline = useMemo(() => {
-    const renderer = gl as unknown as THREE.WebGPURenderer;
-    const pp = new THREE.PostProcessing(renderer);
-
-    const scenePass = pass(scene, camera);
-    const bloomPass = bloomNode(scenePass, 0.9, 0.5, 0.1);
-    bloomPass.threshold.value = 0.1;
-
-    // Subtle CA on the bloomed result, then a faint film grain on top.
-    // Numeric args are wrapped in uniform() — the installed .d.ts types the
-    // params as Node even though the runtime factories accept plain numbers.
-    const aberrated = chromaticAberration(scenePass.add(bloomPass), uniform(0.4));
-    const graded = filmNode(aberrated, uniform(0.06));
-
-    pp.outputNode = graded;
-    return pp;
-  }, [gl, scene, camera]);
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
@@ -148,9 +118,9 @@ export function HeroScene() {
     };
   }, [blobMaterial, particles]);
 
-  // Positive priority: R3F yields its automatic render so our PostProcessing
-  // render runs instead. render() is sync (renderer was already init()'d);
-  // renderAsync() is deprecated since r181.
+  // Default priority: R3F auto-renders the scene each frame with the WebGPU
+  // renderer (the standard, well-tested path). Post-processing/bloom is added
+  // back separately once this base scene is confirmed rendering.
   useFrame((_, delta) => {
     const { x, y } = pointer.current;
     if (group.current) {
@@ -161,9 +131,7 @@ export function HeroScene() {
     if (blob.current) {
       blob.current.rotation.z += delta * 0.04;
     }
-
-    pipeline.render();
-  }, 1);
+  });
 
   return (
     <>
