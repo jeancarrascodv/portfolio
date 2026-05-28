@@ -39,7 +39,9 @@ function makeBlobMaterial() {
   // sampled from the local position offset by time so the blob "flows".
   const t = time.mul(0.45);
   const noiseCoord = positionLocal.mul(1.35).add(vec3(t, t.mul(0.6), t.mul(0.3)));
-  const displacement = mx_fractal_noise_vec3(noiseCoord, 3, 2.0, 0.55).x.mul(0.28);
+  // Softer, slower noise (fewer octaves + lower lacunarity + smaller amplitude)
+  // makes the surface undulate like a viscous drop instead of growing spikes.
+  const displacement = mx_fractal_noise_vec3(noiseCoord, 2, 1.8, 0.55).x.mul(0.18);
   material.positionNode = positionLocal.add(normalLocal.mul(displacement));
 
   // Colour: indigo base, lifted toward cyan/violet where the noise field is hot.
@@ -184,14 +186,10 @@ export function HeroScene() {
       <group ref={group}>
         <Float speed={1.2} rotationIntensity={0.5} floatIntensity={0.85}>
           {/* Organic distorted core (TSL noise displacement). */}
+          {/* High-res sphere for a perfectly circular silhouette; the TSL
+              displacement makes it breathe like a viscous orb. */}
           <mesh ref={blob} scale={1.1} material={blobMaterial}>
-            <icosahedronGeometry args={[1, 12]} />
-          </mesh>
-
-          {/* Wireframe shell */}
-          <mesh scale={1.4}>
-            <icosahedronGeometry args={[1, 2]} />
-            <meshBasicMaterial color="#22d3ee" wireframe transparent opacity={0.12} />
+            <sphereGeometry args={[1, 96, 96]} />
           </mesh>
         </Float>
       </group>
