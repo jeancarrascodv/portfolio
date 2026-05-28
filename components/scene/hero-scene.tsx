@@ -33,7 +33,9 @@ const CORE_EMISSIVE = new THREE.Color("#1b1b4d");
  * between brand indigo and cyan/violet glow based on noise + view normal.
  */
 function makeBlobMaterial() {
-  const material = new THREE.MeshStandardNodeMaterial();
+  // Physical (not Standard) so we can stack a glassy clearcoat over the metal
+  // — that's what sells the "liquid mercury / wet chrome" feel.
+  const material = new THREE.MeshPhysicalNodeMaterial();
 
   // Animated displacement along the surface normal. mx_fractal_noise_vec3 is
   // sampled from the local position offset by time so the blob "flows".
@@ -56,7 +58,11 @@ function makeBlobMaterial() {
   material.emissiveNode = mix(color(CORE_EMISSIVE), color(ACCENT_CYAN), glow.mul(0.55));
 
   material.metalness = 0.95;
-  material.roughness = 0.08;
+  material.roughness = 0.14;
+  // Clearcoat: a perfectly clear, low-roughness layer on top — the classic
+  // recipe for liquid-metal / wet-glass surfaces.
+  material.clearcoat = 1.0;
+  material.clearcoatRoughness = 0.12;
 
   return material;
 }
@@ -83,10 +89,10 @@ function makeParticles() {
   const drift = mx_noise_float(positionLocal.add(time.mul(0.5)), 1.0, 0.0).mul(0.15);
   material.positionNode = positionLocal.add(vec3(0, drift, 0));
   material.colorNode = color(new THREE.Color("#7dd3fc"));
-  material.size = 10;
+  material.size = 8;
   material.sizeAttenuation = true;
   material.transparent = true;
-  material.opacity = 0.85;
+  material.opacity = 0.7;
   material.depthWrite = false;
 
   const points = new THREE.Points(geometry, material);
@@ -112,7 +118,7 @@ export function HeroScene() {
     const pp = new THREE.PostProcessing(gl as unknown as THREE.WebGPURenderer);
     const scenePass = pass(scene, camera);
     const scenePassColor = scenePass.getTextureNode("output");
-    const bloomPass = bloom(scenePassColor, 0.3, 0.5, 0.3); // strength, radius, threshold
+    const bloomPass = bloom(scenePassColor, 0.42, 0.5, 0.28); // strength, radius, threshold
     pp.outputNode = scenePassColor.add(bloomPass);
     return pp;
   }, [gl, scene, camera]);
@@ -141,7 +147,7 @@ export function HeroScene() {
   useFrame((_, delta) => {
     const { x, y } = pointer.current;
     if (group.current) {
-      group.current.rotation.y += delta * 0.08;
+      group.current.rotation.y += delta * 0.05;
       group.current.rotation.x += (-y * 0.25 - group.current.rotation.x) * 0.05;
       // Base offset +2.3 keeps the blob on the right so it doesn't sit under
       // the hero copy (which lives in the left half of the container).
