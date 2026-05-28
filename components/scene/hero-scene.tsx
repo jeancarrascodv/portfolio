@@ -110,7 +110,7 @@ export function HeroScene() {
     const pp = new THREE.PostProcessing(gl as unknown as THREE.WebGPURenderer);
     const scenePass = pass(scene, camera);
     const scenePassColor = scenePass.getTextureNode("output");
-    const bloomPass = bloom(scenePassColor, 0.85, 0.5, 0.15); // strength, radius, threshold
+    const bloomPass = bloom(scenePassColor, 0.5, 0.5, 0.25); // strength, radius, threshold
     pp.outputNode = scenePassColor.add(bloomPass);
     return pp;
   }, [gl, scene, camera]);
