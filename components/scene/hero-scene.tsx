@@ -11,6 +11,7 @@ import {
   mx_fractal_noise_vec3,
   mx_noise_float,
   normalLocal,
+  normalView,
   pass,
   positionLocal,
   time,
@@ -55,7 +56,12 @@ function makeBlobMaterial() {
   const glow = mx_noise_float(noiseCoord.add(vec3(7.1, 3.3, 1.9)), 1.0, 0.0)
     .mul(0.5)
     .add(0.5);
-  material.emissiveNode = mix(color(CORE_EMISSIVE), color(ACCENT_CYAN), glow.mul(0.55));
+  // Cyan rim light via fresnel: (1 - view-space normal.z) ^ 2 is bright at the
+  // silhouette and zero facing the camera, added on top of the emissive so the
+  // bloom pass picks it up as a halo around the orb.
+  const rim = normalView.z.oneMinus().pow(2.0);
+  material.emissiveNode = mix(color(CORE_EMISSIVE), color(ACCENT_CYAN), glow.mul(0.55))
+    .add(color(ACCENT_CYAN).mul(rim.mul(0.8)));
 
   material.metalness = 0.95;
   material.roughness = 0.14;
@@ -196,6 +202,13 @@ export function HeroScene() {
               displacement makes it breathe like a viscous orb. */}
           <mesh ref={blob} scale={1.1} material={blobMaterial}>
             <sphereGeometry args={[1, 96, 96]} />
+          </mesh>
+
+          {/* Geodesic "barrier" shell — icosahedron at higher subdivision so
+              the triangle/hex pattern reads as a fine dome around the orb. */}
+          <mesh scale={1.45}>
+            <icosahedronGeometry args={[1, 5]} />
+            <meshBasicMaterial color="#22d3ee" wireframe transparent opacity={0.1} />
           </mesh>
         </Float>
       </group>
