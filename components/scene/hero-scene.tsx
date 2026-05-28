@@ -37,11 +37,11 @@ function makeBlobMaterial() {
 
   // Animated displacement along the surface normal. mx_fractal_noise_vec3 is
   // sampled from the local position offset by time so the blob "flows".
-  const t = time.mul(0.45);
+  const t = time.mul(0.6);
   const noiseCoord = positionLocal.mul(1.35).add(vec3(t, t.mul(0.6), t.mul(0.3)));
   // Softer, slower noise (fewer octaves + lower lacunarity + smaller amplitude)
   // makes the surface undulate like a viscous drop instead of growing spikes.
-  const displacement = mx_fractal_noise_vec3(noiseCoord, 2, 1.8, 0.55).x.mul(0.18);
+  const displacement = mx_fractal_noise_vec3(noiseCoord, 2, 1.8, 0.55).x.mul(0.22);
   material.positionNode = positionLocal.add(normalLocal.mul(displacement));
 
   // Colour: indigo base, lifted toward cyan/violet where the noise field is hot.
