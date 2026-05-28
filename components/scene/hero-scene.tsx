@@ -39,7 +39,7 @@ function makeBlobMaterial() {
   // sampled from the local position offset by time so the blob "flows".
   const t = time.mul(0.45);
   const noiseCoord = positionLocal.mul(1.35).add(vec3(t, t.mul(0.6), t.mul(0.3)));
-  const displacement = mx_fractal_noise_vec3(noiseCoord, 3, 2.0, 0.55).x.mul(0.38);
+  const displacement = mx_fractal_noise_vec3(noiseCoord, 3, 2.0, 0.55).x.mul(0.28);
   material.positionNode = positionLocal.add(normalLocal.mul(displacement));
 
   // Colour: indigo base, lifted toward cyan/violet where the noise field is hot.
@@ -65,7 +65,7 @@ function makeBlobMaterial() {
  * PointsNodeMaterial: brand-cyan dots that gently bob over time.
  */
 function makeParticles() {
-  const COUNT = 60;
+  const COUNT = 120;
   const positions = new Float32Array(COUNT * 3);
   for (let i = 0; i < COUNT; i++) {
     positions[i * 3 + 0] = (Math.random() * 2 - 1) * 4.5; // scale x ~9
@@ -81,10 +81,10 @@ function makeParticles() {
   const drift = mx_noise_float(positionLocal.add(time.mul(0.5)), 1.0, 0.0).mul(0.15);
   material.positionNode = positionLocal.add(vec3(0, drift, 0));
   material.colorNode = color(new THREE.Color("#7dd3fc"));
-  material.size = 6;
+  material.size = 10;
   material.sizeAttenuation = true;
   material.transparent = true;
-  material.opacity = 0.6;
+  material.opacity = 0.85;
   material.depthWrite = false;
 
   const points = new THREE.Points(geometry, material);
@@ -110,7 +110,7 @@ export function HeroScene() {
     const pp = new THREE.PostProcessing(gl as unknown as THREE.WebGPURenderer);
     const scenePass = pass(scene, camera);
     const scenePassColor = scenePass.getTextureNode("output");
-    const bloomPass = bloom(scenePassColor, 0.5, 0.5, 0.25); // strength, radius, threshold
+    const bloomPass = bloom(scenePassColor, 0.3, 0.5, 0.3); // strength, radius, threshold
     pp.outputNode = scenePassColor.add(bloomPass);
     return pp;
   }, [gl, scene, camera]);
@@ -141,7 +141,9 @@ export function HeroScene() {
     if (group.current) {
       group.current.rotation.y += delta * 0.08;
       group.current.rotation.x += (-y * 0.25 - group.current.rotation.x) * 0.05;
-      group.current.position.x += (x * 0.5 - group.current.position.x) * 0.05;
+      // Base offset +1.8 keeps the blob on the right so it doesn't sit under
+      // the hero copy (which lives in the left half of the container).
+      group.current.position.x += (x * 0.5 + 1.8 - group.current.position.x) * 0.05;
     }
     if (blob.current) {
       blob.current.rotation.z += delta * 0.04;
@@ -182,12 +184,12 @@ export function HeroScene() {
       <group ref={group}>
         <Float speed={1.2} rotationIntensity={0.5} floatIntensity={0.85}>
           {/* Organic distorted core (TSL noise displacement). */}
-          <mesh ref={blob} scale={1.7} material={blobMaterial}>
+          <mesh ref={blob} scale={1.1} material={blobMaterial}>
             <icosahedronGeometry args={[1, 12]} />
           </mesh>
 
           {/* Wireframe shell */}
-          <mesh scale={2.05}>
+          <mesh scale={1.4}>
             <icosahedronGeometry args={[1, 2]} />
             <meshBasicMaterial color="#22d3ee" wireframe transparent opacity={0.12} />
           </mesh>
