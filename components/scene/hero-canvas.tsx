@@ -1,8 +1,13 @@
 "use client";
 
 import { Suspense, useSyncExternalStore } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, extend } from "@react-three/fiber";
+import * as THREE from "three/webgpu";
 import { HeroScene } from "./hero-scene";
+
+// Register every three/webgpu class with R3F's reconciler so the WebGPU node
+// materials / objects are usable from the scene.
+extend(THREE as unknown as Record<string, new (...args: never[]) => unknown>);
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
@@ -48,7 +53,18 @@ export function HeroCanvas() {
       <Canvas
         dpr={[1, 2]}
         camera={{ position: [0, 0, 6], fov: 45 }}
-        gl={{ antialias: true, alpha: true }}
+        // Async gl factory: build a WebGPURenderer and await init() before R3F
+        // uses it. WebGPURenderer transparently falls back to a WebGL2 backend
+        // when WebGPU is unavailable — that fallback is intentional, keep it.
+        gl={async (props) => {
+          const renderer = new THREE.WebGPURenderer({
+            ...(props as ConstructorParameters<typeof THREE.WebGPURenderer>[0]),
+            antialias: true,
+            alpha: true,
+          });
+          await renderer.init();
+          return renderer;
+        }}
         style={{ background: "transparent" }}
       >
         <Suspense fallback={null}>

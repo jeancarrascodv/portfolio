@@ -1,16 +1,134 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial, Sparkles } from "@react-three/drei";
-import type { Group, Mesh } from "three";
+import { useEffect, useMemo, useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { Environment, Float, Lightformer } from "@react-three/drei";
+import * as THREE from "three/webgpu";
+import {
+  bloom as bloomNode,
+} from "three/addons/tsl/display/BloomNode.js";
+import { chromaticAberration } from "three/addons/tsl/display/ChromaticAberrationNode.js";
+import { film as filmNode } from "three/addons/tsl/display/FilmNode.js";
+import {
+  color,
+  mix,
+  mx_fractal_noise_vec3,
+  mx_noise_float,
+  normalLocal,
+  pass,
+  positionLocal,
+  time,
+  uniform,
+  vec3,
+} from "three/tsl";
+
+/**
+ * Brand palette.
+ * background #07070b · accent cyan #22d3ee · accent-2 violet #8b5cf6
+ */
+const ACCENT_CYAN = new THREE.Color("#22d3ee");
+const ACCENT_VIOLET = new THREE.Color("#8b5cf6");
+const CORE_INDIGO = new THREE.Color("#3b3a8f");
+const CORE_EMISSIVE = new THREE.Color("#1b1b4d");
+
+/**
+ * Builds the TSL MeshStandardNodeMaterial that replaces drei MeshDistortMaterial
+ * (GLSL-only). The vertex surface is displaced by animated fractal noise so the
+ * icosahedron breathes like the old distort blob, and the surface colour mixes
+ * between brand indigo and cyan/violet glow based on noise + view normal.
+ */
+function makeBlobMaterial() {
+  const material = new THREE.MeshStandardNodeMaterial();
+
+  // Animated displacement along the surface normal. mx_fractal_noise_vec3 is
+  // sampled from the local position offset by time so the blob "flows".
+  const t = time.mul(0.45);
+  const noiseCoord = positionLocal.mul(1.35).add(vec3(t, t.mul(0.6), t.mul(0.3)));
+  const displacement = mx_fractal_noise_vec3(noiseCoord, 3, 2.0, 0.55).x.mul(0.38);
+  material.positionNode = positionLocal.add(normalLocal.mul(displacement));
+
+  // Colour: indigo base, lifted toward cyan/violet where the noise field is hot.
+  const tint = mx_noise_float(noiseCoord.mul(0.6).add(t), 1.0, 0.0).mul(0.5).add(0.5);
+  const baseColor = mix(color(CORE_INDIGO), color(ACCENT_VIOLET), tint.mul(0.6));
+  material.colorNode = baseColor;
+
+  // Emissive cyan rim glow modulated by the same field for a living core.
+  const glow = mx_noise_float(noiseCoord.add(vec3(7.1, 3.3, 1.9)), 1.0, 0.0)
+    .mul(0.5)
+    .add(0.5);
+  material.emissiveNode = mix(color(CORE_EMISSIVE), color(ACCENT_CYAN), glow.mul(0.55));
+
+  material.metalness = 0.85;
+  material.roughness = 0.18;
+
+  return material;
+}
+
+/**
+ * Lightweight TSL particle field replacing drei <Sparkles> (its GLSL
+ * ShaderMaterial does not run under WebGPU). A THREE.Points with a
+ * PointsNodeMaterial: brand-cyan dots that gently bob over time.
+ */
+function makeParticles() {
+  const COUNT = 60;
+  const positions = new Float32Array(COUNT * 3);
+  for (let i = 0; i < COUNT; i++) {
+    positions[i * 3 + 0] = (Math.random() * 2 - 1) * 4.5; // scale x ~9
+    positions[i * 3 + 1] = (Math.random() * 2 - 1) * 3.0; // scale y ~6
+    positions[i * 3 + 2] = (Math.random() * 2 - 1) * 2.5; // scale z ~5
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+  const material = new THREE.PointsNodeMaterial();
+  // Gentle vertical drift so the field feels alive (like Sparkles speed).
+  const drift = mx_noise_float(positionLocal.add(time.mul(0.5)), 1.0, 0.0).mul(0.15);
+  material.positionNode = positionLocal.add(vec3(0, drift, 0));
+  material.colorNode = color(new THREE.Color("#7dd3fc"));
+  material.size = 6;
+  material.sizeAttenuation = true;
+  material.transparent = true;
+  material.opacity = 0.6;
+  material.depthWrite = false;
+
+  const points = new THREE.Points(geometry, material);
+  points.frustumCulled = false;
+  return points;
+}
 
 export function HeroScene() {
-  const group = useRef<Group>(null);
-  const blob = useRef<Mesh>(null);
+  const group = useRef<THREE.Group>(null);
+  const blob = useRef<THREE.Mesh>(null);
   // Normalized pointer (-1..1). Fed from a window listener so the canvas can
   // stay pointer-events:none and never block the hero text/buttons.
   const pointer = useRef({ x: 0, y: 0 });
+
+  const { gl, scene, camera } = useThree();
+
+  const blobMaterial = useMemo(() => makeBlobMaterial(), []);
+  const particles = useMemo(() => makeParticles(), []);
+
+  // Build the WebGPU post-processing graph once: scene pass + bloom (+ subtle
+  // chromatic aberration + film grain) as the output node. RenderPipeline is
+  // the r183+ replacement for the deprecated PostProcessing class.
+  const pipeline = useMemo(() => {
+    const renderer = gl as unknown as THREE.WebGPURenderer;
+    const pp = new THREE.PostProcessing(renderer);
+
+    const scenePass = pass(scene, camera);
+    const bloomPass = bloomNode(scenePass, 0.9, 0.5, 0.1);
+    bloomPass.threshold.value = 0.1;
+
+    // Subtle CA on the bloomed result, then a faint film grain on top.
+    // Numeric args are wrapped in uniform() — the installed .d.ts types the
+    // params as Node even though the runtime factories accept plain numbers.
+    const aberrated = chromaticAberration(scenePass.add(bloomPass), uniform(0.4));
+    const graded = filmNode(aberrated, uniform(0.06));
+
+    pp.outputNode = graded;
+    return pp;
+  }, [gl, scene, camera]);
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
@@ -21,6 +139,18 @@ export function HeroScene() {
     return () => window.removeEventListener("pointermove", onMove);
   }, []);
 
+  // Dispose GPU resources on unmount.
+  useEffect(() => {
+    return () => {
+      blobMaterial.dispose();
+      particles.geometry.dispose();
+      (particles.material as THREE.Material).dispose();
+    };
+  }, [blobMaterial, particles]);
+
+  // Positive priority: R3F yields its automatic render so our PostProcessing
+  // render runs instead. render() is sync (renderer was already init()'d);
+  // renderAsync() is deprecated since r181.
   useFrame((_, delta) => {
     const { x, y } = pointer.current;
     if (group.current) {
@@ -31,7 +161,9 @@ export function HeroScene() {
     if (blob.current) {
       blob.current.rotation.z += delta * 0.04;
     }
-  });
+
+    pipeline.render();
+  }, 1);
 
   return (
     <>
@@ -40,20 +172,34 @@ export function HeroScene() {
       <pointLight position={[-5, -3, 2]} intensity={45} color="#8b5cf6" />
       <pointLight position={[0, 3, -5]} intensity={20} color="#ffffff" />
 
+      {/* Reflections for the metallic core. Lightformers give controllable
+          brand-tinted highlights and work with WebGPURenderer's PMREM. */}
+      <Environment resolution={256}>
+        <Lightformer
+          intensity={2}
+          color="#22d3ee"
+          position={[4, 3, 4]}
+          scale={[6, 6, 1]}
+        />
+        <Lightformer
+          intensity={1.4}
+          color="#8b5cf6"
+          position={[-5, -2, 2]}
+          scale={[6, 6, 1]}
+        />
+        <Lightformer
+          intensity={0.6}
+          color="#ffffff"
+          position={[0, 4, -5]}
+          scale={[8, 4, 1]}
+        />
+      </Environment>
+
       <group ref={group}>
         <Float speed={1.2} rotationIntensity={0.5} floatIntensity={0.85}>
-          {/* Organic distorted core */}
-          <mesh ref={blob} scale={1.7}>
+          {/* Organic distorted core (TSL noise displacement). */}
+          <mesh ref={blob} scale={1.7} material={blobMaterial}>
             <icosahedronGeometry args={[1, 12]} />
-            <MeshDistortMaterial
-              color="#3b3a8f"
-              emissive="#1b1b4d"
-              emissiveIntensity={0.5}
-              roughness={0.18}
-              metalness={0.85}
-              distort={0.38}
-              speed={1.6}
-            />
           </mesh>
 
           {/* Wireframe shell */}
@@ -62,18 +208,10 @@ export function HeroScene() {
             <meshBasicMaterial color="#22d3ee" wireframe transparent opacity={0.12} />
           </mesh>
         </Float>
-
       </group>
 
-      {/* Floating particles (outside the rotating group so they drift gently) */}
-      <Sparkles
-        count={60}
-        scale={[9, 6, 5]}
-        size={2.2}
-        speed={0.5}
-        opacity={0.6}
-        color="#7dd3fc"
-      />
+      {/* Floating particles (outside the rotating group so they drift gently). */}
+      <primitive object={particles} />
     </>
   );
 }
