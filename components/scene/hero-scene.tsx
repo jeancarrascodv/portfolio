@@ -55,8 +55,8 @@ function makeBlobMaterial() {
     .add(0.5);
   material.emissiveNode = mix(color(CORE_EMISSIVE), color(ACCENT_CYAN), glow.mul(0.55));
 
-  material.metalness = 0.85;
-  material.roughness = 0.18;
+  material.metalness = 0.95;
+  material.roughness = 0.08;
 
   return material;
 }
