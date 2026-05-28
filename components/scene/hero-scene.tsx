@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Environment, Float, Lightformer } from "@react-three/drei";
 import * as THREE from "three/webgpu";
+import { bloom } from "three/addons/tsl/display/BloomNode.js";
 import {
   color,
   mix,
   mx_fractal_noise_vec3,
   mx_noise_float,
   normalLocal,
+  pass,
   positionLocal,
   time,
   vec3,
@@ -100,6 +102,19 @@ export function HeroScene() {
   const blobMaterial = useMemo(() => makeBlobMaterial(), []);
   const particles = useMemo(() => makeParticles(), []);
 
+  // WebGPU post-processing: whole-scene bloom only. Follows the installed
+  // BloomNode docs exactly — bloom takes the scene pass's "output" texture
+  // node, and the result is added back onto that color.
+  const { gl, scene, camera } = useThree();
+  const pipeline = useMemo(() => {
+    const pp = new THREE.PostProcessing(gl as unknown as THREE.WebGPURenderer);
+    const scenePass = pass(scene, camera);
+    const scenePassColor = scenePass.getTextureNode("output");
+    const bloomPass = bloom(scenePassColor, 0.85, 0.5, 0.15); // strength, radius, threshold
+    pp.outputNode = scenePassColor.add(bloomPass);
+    return pp;
+  }, [gl, scene, camera]);
+
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
       pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -118,9 +133,9 @@ export function HeroScene() {
     };
   }, [blobMaterial, particles]);
 
-  // Default priority: R3F auto-renders the scene each frame with the WebGPU
-  // renderer (the standard, well-tested path). Post-processing/bloom is added
-  // back separately once this base scene is confirmed rendering.
+  // Priority 1: R3F yields its automatic render so the post-processing
+  // pipeline renders instead. renderAsync() is the canonical WebGPU call —
+  // the sync render() left the canvas blank (never presented the frame).
   useFrame((_, delta) => {
     const { x, y } = pointer.current;
     if (group.current) {
@@ -131,7 +146,8 @@ export function HeroScene() {
     if (blob.current) {
       blob.current.rotation.z += delta * 0.04;
     }
-  });
+    pipeline.renderAsync();
+  }, 1);
 
   return (
     <>
