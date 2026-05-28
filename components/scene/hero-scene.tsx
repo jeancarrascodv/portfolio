@@ -141,9 +141,9 @@ export function HeroScene() {
     if (group.current) {
       group.current.rotation.y += delta * 0.08;
       group.current.rotation.x += (-y * 0.25 - group.current.rotation.x) * 0.05;
-      // Base offset +1.8 keeps the blob on the right so it doesn't sit under
+      // Base offset +2.3 keeps the blob on the right so it doesn't sit under
       // the hero copy (which lives in the left half of the container).
-      group.current.position.x += (x * 0.5 + 1.8 - group.current.position.x) * 0.05;
+      group.current.position.x += (x * 0.5 + 2.3 - group.current.position.x) * 0.05;
     }
     if (blob.current) {
       blob.current.rotation.z += delta * 0.04;
