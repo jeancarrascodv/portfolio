@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { SectionHeading } from "@/components/section-heading";
 import { Reveal } from "@/components/reveal";
+import { SpotlightCard } from "@/components/spotlight-card";
 import {
   GitHubIcon,
   LinkedInIcon,
@@ -37,12 +39,12 @@ export function Contact({ contact }: { contact: Dictionary["contact"] }) {
   return (
     <section
       id="contact"
-      className="mx-auto max-w-6xl scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32"
+      className="mx-auto max-w-6xl scroll-mt-20 px-5 py-24 sm:px-8 sm:py-32"
     >
       <SectionHeading label={contact.label} title={contact.title} subtitle={contact.subtitle} />
 
       <Reveal>
-        <div className="glass relative overflow-hidden rounded-3xl p-8 sm:p-12">
+        <SpotlightCard className="card relative overflow-hidden rounded-3xl p-8 sm:p-12">
           <div
             className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl"
             aria-hidden
@@ -93,8 +95,26 @@ export function Contact({ contact }: { contact: Dictionary["contact"] }) {
               </div>
             </div>
           </div>
-        </div>
+        </SpotlightCard>
       </Reveal>
+
+      {/* Toast confirmation when the email is copied. */}
+      <AnimatePresence>
+        {copied && (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="glass fixed bottom-6 left-1/2 z-[70] flex -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-foreground shadow-lg"
+            role="status"
+            aria-live="polite"
+          >
+            <CheckIcon width={16} height={16} className="text-accent" />
+            {contact.copied}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

@@ -25,8 +25,8 @@ export const siteConfig = {
   initials: "JC",
 
   role: {
-    en: "AI Automation Engineer · Industrial Engineer",
-    es: "Ingeniero de Automatización con IA · Ingeniero Industrial",
+    en: "Industrial Engineer · IT Integration & AI",
+    es: "Ingeniero Industrial · Integración de TI e IA",
   } as Localized,
 
   location: {

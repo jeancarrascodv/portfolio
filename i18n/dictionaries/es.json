@@ -1,7 +1,7 @@
 {
   "nav": {
     "about": "Sobre mí",
-    "skills": "Skills",
+    "skills": "Soluciones",
     "work": "Proyectos",
     "experience": "Experiencia",
     "contact": "Contacto",
@@ -57,12 +57,12 @@
     "copied": "¡Copiado!"
   },
   "footer": {
-    "builtWith": "Hecho con Next.js, React Three Fiber y Tailwind CSS",
+    "builtWith": "Ingeniería industrial. Tecnología aplicada. Mejora continua.",
     "rights": "Todos los derechos reservados.",
     "backToTop": "Volver arriba"
   },
   "meta": {
-    "title": "Jean Carrasco · Ingeniero de Automatización con IA",
-    "description": "Jean Carrasco es ingeniero de software e ingeniero industrial que construye automatización con IA, sistemas de generación de leads y agentes de IA que escalan operaciones. Fundador de QueryBay. Disponible para nuevas oportunidades."
+    "title": "Jean Carrasco | Ingeniería Industrial, TI e IA",
+    "description": "Ingeniero industrial y de software. Optimizo operaciones integrando procesos, datos, sistemas de TI, automatización y agentes de IA con LLMs. Conoce mi trabajo."
   }
 }

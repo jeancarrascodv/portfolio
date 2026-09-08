@@ -2,6 +2,9 @@
 
 /* ------------------------------------------------------------------ */
 /*  Design tokens                                                      */
+/*  Dark is the default identity (:root). Light theme overrides live   */
+/*  under html.light. Every component reads these vars, so flipping    */
+/*  them re-themes the whole site.                                     */
 /* ------------------------------------------------------------------ */
 :root {
   --background: #07070b;
@@ -9,8 +12,80 @@
   --foreground: #ededf2;
   --muted: #9b9bac;
   --border: rgba(255, 255, 255, 0.08);
+
   --accent: #22d3ee; /* cyan */
   --accent-2: #8b5cf6; /* violet */
+
+  /* Elevated surfaces (glass cards, pills, tags). */
+  --surface: rgba(255, 255, 255, 0.025);
+  --surface-2: rgba(255, 255, 255, 0.045);
+  --surface-strong: rgba(255, 255, 255, 0.06);
+
+  /* Decorative layers. */
+  --grid-line: rgba(255, 255, 255, 0.03);
+  --aurora-1: rgba(34, 211, 238, 0.08);
+  --aurora-2: rgba(139, 92, 246, 0.08);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.2);
+  --selection: rgba(34, 211, 238, 0.25);
+  --selection-text: #fff;
+
+  --ring: var(--accent);
+  --shadow-card: 0 1px 0 0 rgba(255, 255, 255, 0.04) inset, 0 18px 40px -24px rgba(0, 0, 0, 0.8);
+
+  /* Real page background per theme. NOT overridden by .theme-dark, so a dark
+     island (the hero) can fade into whatever the actual page color is. */
+  --page-bg: #07070b;
+}
+
+html.light {
+  --background: #f6f7fb;
+  --background-soft: #ffffff;
+  --foreground: #0e0e16;
+  --muted: #55556a;
+  --border: rgba(10, 12, 30, 0.1);
+
+  /* Darker accent variants so text/labels keep contrast on a light bg.
+     The 3D scene keeps its own bright cyan/violet literals. */
+  --accent: #0e7490; /* cyan-700 */
+  --accent-2: #7c3aed; /* violet-600 */
+
+  --surface: rgba(255, 255, 255, 0.7);
+  --surface-2: rgba(10, 12, 30, 0.04);
+  --surface-strong: rgba(10, 12, 30, 0.06);
+
+  --grid-line: rgba(10, 12, 30, 0.05);
+  --aurora-1: rgba(8, 145, 178, 0.1);
+  --aurora-2: rgba(124, 58, 237, 0.1);
+  --scrollbar-thumb: rgba(10, 12, 30, 0.18);
+  --scrollbar-thumb-hover: rgba(10, 12, 30, 0.3);
+  --selection: rgba(14, 116, 144, 0.2);
+  --selection-text: #0e0e16;
+
+  --shadow-card: 0 1px 0 0 rgba(255, 255, 255, 0.6) inset, 0 18px 40px -24px rgba(20, 20, 60, 0.25);
+
+  --page-bg: #f6f7fb;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Forced-dark island. Re-declares the dark token set locally so a    */
+/*  subtree (the hero, the nav while over it) always renders dark and  */
+/*  legible, even when the page theme is light. Keeps the bright brand */
+/*  accents so the orb's glow reads the same in both themes.           */
+/* ------------------------------------------------------------------ */
+.theme-dark {
+  --background: #07070b;
+  --background-soft: #0d0d14;
+  --foreground: #ededf2;
+  --muted: #9b9bac;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #22d3ee;
+  --accent-2: #8b5cf6;
+  --surface: rgba(255, 255, 255, 0.025);
+  --surface-2: rgba(255, 255, 255, 0.045);
+  --surface-strong: rgba(255, 255, 255, 0.06);
+  --grid-line: rgba(255, 255, 255, 0.03);
+  color: var(--foreground);
 }
 
 @theme inline {
@@ -21,6 +96,9 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-strong: var(--surface-strong);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -35,6 +113,10 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+}
+html.light {
+  color-scheme: light;
 }
 
 body {
@@ -44,14 +126,14 @@ body {
   overflow-x: hidden;
   /* subtle aurora glow behind everything */
   background-image:
-    radial-gradient(60rem 60rem at 70% -10%, rgba(34, 211, 238, 0.08), transparent 60%),
-    radial-gradient(50rem 50rem at 10% 10%, rgba(139, 92, 246, 0.08), transparent 55%);
+    radial-gradient(60rem 60rem at 70% -10%, var(--aurora-1), transparent 60%),
+    radial-gradient(50rem 50rem at 10% 10%, var(--aurora-2), transparent 55%);
   background-attachment: fixed;
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.25);
-  color: #fff;
+  background: var(--selection);
+  color: var(--selection-text);
 }
 
 /* Thin custom scrollbar */
@@ -62,12 +144,37 @@ body {
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--scrollbar-thumb);
   border-radius: 9999px;
   border: 2px solid var(--background);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Visible, consistent keyboard focus on every interactive element. */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+/* Don't double-up the ring on mouse clicks. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Smooth cross-fade only while the theme toggle is flipping. */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    fill 0.3s ease,
+    box-shadow 0.3s ease !important;
+  transition-delay: 0s !important;
 }
 
 /* ------------------------------------------------------------------ */
@@ -83,18 +190,48 @@ body {
 
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
   background-size: 56px 56px;
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 75%);
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 75%);
 }
 
 .glass {
-  background: rgba(255, 255, 255, 0.025);
+  background: var(--surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
+}
+
+/* Elevated card: glass + depth shadow + a hairline gradient edge. */
+.card {
+  position: relative;
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+/* Cursor-follow spotlight used by SpotlightCard. The component sets
+   --mx / --my (px, relative to the card) on hover. */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    16rem 16rem at var(--mx, 50%) var(--my, 0%),
+    color-mix(in srgb, var(--accent) 14%, transparent),
+    transparent 60%
+  );
+}
+.spotlight:hover::before {
+  opacity: 1;
 }
 
 /* Respect users who prefer reduced motion */
