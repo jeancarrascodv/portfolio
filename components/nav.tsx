@@ -1,40 +1,130 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { ArrowUpRightIcon } from "@/components/icons";
+import { DocumentIcon } from "@/components/icons";
 import { siteConfig } from "@/lib/site";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 
 export function Nav({ nav, locale }: { nav: Dictionary["nav"]; locale: Locale }) {
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const toggle = useRef<HTMLButtonElement>(null);
-  const header = useRef<HTMLElement>(null);
+
   useEffect(() => {
-    if (!open) return;
-    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") { setOpen(false); toggle.current?.focus(); } };
-    const onPointer = (event: PointerEvent) => { if (event.target instanceof Node && !header.current?.contains(event.target)) setOpen(false); };
-    const media = window.matchMedia("(min-width: 601px)");
-    const onResize = () => { if (media.matches) setOpen(false); };
-    document.addEventListener("keydown", onKey);
-    document.addEventListener("pointerdown", onPointer);
-    media.addEventListener("change", onResize);
-    return () => { document.removeEventListener("keydown", onKey); document.removeEventListener("pointerdown", onPointer); media.removeEventListener("change", onResize); };
-  }, [open]);
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const links = [
     { href: "#about", label: nav.about },
-    { href: "#skills", label: locale === "es" ? "Soluciones" : "Solutions" },
+    { href: "#skills", label: nav.skills },
     { href: "#work", label: nav.work },
     { href: "#experience", label: nav.experience },
+    { href: "#contact", label: nav.contact },
   ];
-  return <header className="ops-nav" ref={header}>
-    <nav aria-label={locale === "es" ? "Navegación principal" : "Main navigation"} className="ops-container ops-nav-inner">
-      <a href="#top" className="ops-brand" aria-label={siteConfig.name}><span className="ops-brand-mark">JC</span><span>Jean Carrasco<small>INDUSTRIAL & SOFTWARE ENGINEER</small></span></a>
-      <ul className="ops-nav-links">{links.map(link => <li key={link.href}><a href={link.href}>{link.label}</a></li>)}</ul>
-      <div className="ops-nav-actions"><a className="ops-nav-talk" href="#contact">{locale === "es" ? "Hablemos" : "Let's talk"}<ArrowUpRightIcon width={14} /></a><ThemeToggle label={locale === "es" ? "Cambiar tema" : "Toggle theme"} /><LanguageSwitcher locale={locale} /><button ref={toggle} type="button" className="ops-mobile-toggle" aria-label={locale === "es" ? (open ? "Cerrar menú" : "Abrir menú") : (open ? "Close menu" : "Open menu")} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(value => !value)}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">{open ? <path d="m5 5 14 14M5 19 19 5" /> : <path d="M3 7h18M3 12h18M3 17h18" />}</svg></button></div>
-    </nav>
-    {open && <nav id="mobile-navigation" className="ops-mobile-menu" aria-label={locale === "es" ? "Navegación móvil" : "Mobile navigation"}>{[...links, { href: "#contact", label: nav.contact }].map(link => <a key={link.href} href={link.href} onClick={() => setOpen(false)}>{link.label}</a>)}</nav>}
-  </header>;
+
+  return (
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled ? "glass border-b border-border" : "border-b border-transparent"
+      }`}
+    >
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
+        <a
+          href="#top"
+          className="group flex items-center gap-2 font-mono text-sm font-semibold tracking-tight"
+          aria-label={siteConfig.name}
+        >
+          <span className="grid h-8 w-8 place-items-center rounded-md bg-gradient-to-br from-accent to-accent-2 text-background">
+            {siteConfig.initials}
+          </span>
+          <span className="hidden text-foreground sm:inline">{siteConfig.name}</span>
+        </a>
+
+        {/* Desktop links */}
+        <ul className="hidden items-center gap-7 text-sm text-muted md:flex">
+          {links.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                className="relative transition-colors hover:text-foreground after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-accent after:transition-all hover:after:w-full"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex items-center gap-3">
+          {siteConfig.resume && (
+            <a
+              href={siteConfig.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden items-center gap-1.5 rounded-full border border-border px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent sm:inline-flex"
+            >
+              <DocumentIcon width={14} height={14} />
+              {nav.resume}
+            </a>
+          )}
+          <LanguageSwitcher locale={locale} />
+          {/* Mobile menu button */}
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Menu"
+            aria-expanded={open}
+            className="grid h-9 w-9 place-items-center rounded-md border border-border text-foreground md:hidden"
+          >
+            <span className="relative block h-3 w-4">
+              <span
+                className={`absolute left-0 block h-0.5 w-4 bg-current transition-all ${
+                  open ? "top-1.5 rotate-45" : "top-0"
+                }`}
+              />
+              <span
+                className={`absolute left-0 top-1.5 block h-0.5 w-4 bg-current transition-all ${
+                  open ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <span
+                className={`absolute left-0 block h-0.5 w-4 bg-current transition-all ${
+                  open ? "top-1.5 -rotate-45" : "top-3"
+                }`}
+              />
+            </span>
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="glass overflow-hidden border-b border-border md:hidden"
+          >
+            {links.map((link) => (
+              <li key={link.href} className="border-b border-border/60 last:border-0">
+                <a
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="block px-6 py-3.5 text-sm text-muted transition-colors hover:bg-white/5 hover:text-foreground"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </header>
+  );
 }

@@ -32,10 +32,7 @@ export function Hero({ hero, locale }: { hero: Dictionary["hero"]; locale: Local
   ].filter((s) => s.href);
 
   return (
-    <section className="theme-dark relative flex min-h-[100svh] items-center overflow-hidden">
-      {/* The WebGPU canvas paints the hero dark on its own, so we only force
-          dark *text* tokens here (via .theme-dark) — never an opaque layer or
-          extra stacking that could cover the orb. */}
+    <section className="relative flex min-h-[100svh] items-center overflow-hidden">
       <div className="bg-grid pointer-events-none absolute inset-0 -z-20" aria-hidden />
       <HeroCanvas />
 

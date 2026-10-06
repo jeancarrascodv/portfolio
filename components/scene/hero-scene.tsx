@@ -78,8 +78,8 @@ function makeBlobMaterial() {
  * ShaderMaterial does not run under WebGPU). A THREE.Points with a
  * PointsNodeMaterial: brand-cyan dots that gently bob over time.
  */
-function makeParticles(count = 120) {
-  const COUNT = count;
+function makeParticles() {
+  const COUNT = 120;
   const positions = new Float32Array(COUNT * 3);
   for (let i = 0; i < COUNT; i++) {
     positions[i * 3 + 0] = (Math.random() * 2 - 1) * 4.5; // scale x ~9
@@ -106,7 +106,7 @@ function makeParticles(count = 120) {
   return points;
 }
 
-export function HeroScene({ lowPower = false }: { lowPower?: boolean }) {
+export function HeroScene() {
   const group = useRef<THREE.Group>(null);
   const blob = useRef<THREE.Mesh>(null);
   // Normalized pointer (-1..1). Fed from a window listener so the canvas can
@@ -114,8 +114,7 @@ export function HeroScene({ lowPower = false }: { lowPower?: boolean }) {
   const pointer = useRef({ x: 0, y: 0 });
 
   const blobMaterial = useMemo(() => makeBlobMaterial(), []);
-  // Thin the particle field on small screens to save fill rate.
-  const particles = useMemo(() => makeParticles(lowPower ? 50 : 120), [lowPower]);
+  const particles = useMemo(() => makeParticles(), []);
 
   // WebGPU post-processing: whole-scene bloom only. Follows the installed
   // BloomNode docs exactly — bloom takes the scene pass's "output" texture
@@ -125,13 +124,10 @@ export function HeroScene({ lowPower = false }: { lowPower?: boolean }) {
     const pp = new THREE.PostProcessing(gl as unknown as THREE.WebGPURenderer);
     const scenePass = pass(scene, camera);
     const scenePassColor = scenePass.getTextureNode("output");
-    // Lighter bloom on mobile (cheaper, and the orb is smaller there).
-    const bloomPass = lowPower
-      ? bloom(scenePassColor, 0.32, 0.4, 0.3)
-      : bloom(scenePassColor, 0.42, 0.5, 0.28); // strength, radius, threshold
+    const bloomPass = bloom(scenePassColor, 0.42, 0.5, 0.28); // strength, radius, threshold
     pp.outputNode = scenePassColor.add(bloomPass);
     return pp;
-  }, [gl, scene, camera, lowPower]);
+  }, [gl, scene, camera]);
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {

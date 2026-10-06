@@ -1,6 +1,5 @@
 import { SectionHeading } from "@/components/section-heading";
 import { Reveal } from "@/components/reveal";
-import { SpotlightCard } from "@/components/spotlight-card";
 import { ArrowUpRightIcon, GitHubIcon, GlobeIcon } from "@/components/icons";
 import { projects, t } from "@/lib/site";
 import type { Locale } from "@/i18n/config";
@@ -16,7 +15,7 @@ export function Projects({
   return (
     <section
       id="work"
-      className="mx-auto max-w-6xl scroll-mt-20 px-5 py-24 sm:px-8 sm:py-32"
+      className="mx-auto max-w-6xl scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32"
     >
       <SectionHeading label={dict.label} title={dict.title} subtitle={dict.subtitle} />
 
@@ -27,10 +26,13 @@ export function Projects({
             delay={(i % 2) * 0.1}
             className={project.featured ? "lg:col-span-2" : ""}
           >
-            <SpotlightCard
-              as="article"
-              className="card group relative flex h-full flex-col overflow-hidden rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40"
-            >
+            <article className="glass group relative flex h-full flex-col overflow-hidden rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40">
+              {/* glow on hover */}
+              <div
+                className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-accent/10 opacity-0 blur-3xl transition-opacity duration-300 group-hover:opacity-100"
+                aria-hidden
+              />
+
               <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3">
@@ -56,7 +58,7 @@ export function Projects({
                 {project.tags.map((tag) => (
                   <li
                     key={tag}
-                    className="rounded-md bg-surface-2 px-2.5 py-1 font-mono text-xs text-foreground/80"
+                    className="rounded-md bg-white/[0.04] px-2.5 py-1 font-mono text-xs text-foreground/80"
                   >
                     {tag}
                   </li>
@@ -88,7 +90,7 @@ export function Projects({
                   </a>
                 )}
               </div>
-            </SpotlightCard>
+            </article>
           </Reveal>
         ))}
       </div>

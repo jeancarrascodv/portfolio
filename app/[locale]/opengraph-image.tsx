@@ -29,10 +29,10 @@ export default async function OpengraphImage({
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "80px",
-          background: "#1b3028",
+          background: "#07070b",
           backgroundImage:
-            "radial-gradient(600px 600px at 80% -10%, rgba(217,239,147,0.12), transparent 60%), radial-gradient(500px 500px at 0% 100%, rgba(189,207,138,0.08), transparent 55%)",
-          color: "#f1f3e4",
+            "radial-gradient(600px 600px at 80% -10%, rgba(34,211,238,0.22), transparent 60%), radial-gradient(500px 500px at 0% 100%, rgba(139,92,246,0.22), transparent 55%)",
+          color: "#ededf2",
           fontFamily: "sans-serif",
         }}
       >
@@ -47,14 +47,14 @@ export default async function OpengraphImage({
               justifyContent: "center",
               fontSize: 26,
               fontWeight: 700,
-              color: "#1b3028",
-              background: "linear-gradient(135deg, #d9ef93, #bdcf8a)",
+              color: "#07070b",
+              background: "linear-gradient(135deg, #22d3ee, #8b5cf6)",
             }}
           >
             {siteConfig.initials}
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 22, color: "#b8c8ae" }}>
-            <div style={{ width: 10, height: 10, borderRadius: 999, background: "#d9ef93" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 22, color: "#9b9bac" }}>
+            <div style={{ width: 10, height: 10, borderRadius: 999, background: "#22d3ee" }} />
             {available}
           </div>
         </div>
@@ -65,17 +65,17 @@ export default async function OpengraphImage({
               fontSize: 96,
               fontWeight: 700,
               letterSpacing: "-0.03em",
-              backgroundImage: "linear-gradient(110deg, #d9ef93, #bdcf8a)",
+              backgroundImage: "linear-gradient(110deg, #22d3ee, #8b5cf6)",
               backgroundClip: "text",
               color: "transparent",
             }}
           >
             {siteConfig.name}
           </div>
-          <div style={{ fontSize: 34, color: "#f1f3e4", marginTop: 8 }}>{role}</div>
+          <div style={{ fontSize: 40, color: "#ededf2", marginTop: 8 }}>{role}</div>
         </div>
 
-        <div style={{ fontSize: 26, color: "#b8c8ae" }}>{siteConfig.url.replace("https://", "")}</div>
+        <div style={{ fontSize: 26, color: "#9b9bac" }}>{siteConfig.url.replace("https://", "")}</div>
       </div>
     ),
     { ...size },

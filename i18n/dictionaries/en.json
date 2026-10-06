@@ -1,7 +1,7 @@
 {
   "nav": {
     "about": "About",
-    "skills": "Solutions",
+    "skills": "Skills",
     "work": "Work",
     "experience": "Experience",
     "contact": "Contact",
@@ -57,12 +57,12 @@
     "copied": "Copied!"
   },
   "footer": {
-    "builtWith": "Industrial engineering. Applied technology. Continuous improvement.",
+    "builtWith": "Built with Next.js, React Three Fiber & Tailwind CSS",
     "rights": "All rights reserved.",
     "backToTop": "Back to top"
   },
   "meta": {
-    "title": "Jean Carrasco | Industrial Engineering, IT & AI",
-    "description": "Industrial and software engineer connecting operations, data, IT systems, automation and AI agents with LLMs. Explore my work in process improvement and integration."
+    "title": "Jean Carrasco · AI Automation Engineer",
+    "description": "Jean Carrasco is a software engineer and industrial engineer who builds AI automation, lead generation systems and AI agents that scale operations. Founder of QueryBay. Open to new opportunities."
   }
 }
